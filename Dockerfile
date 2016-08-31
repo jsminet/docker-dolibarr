@@ -18,7 +18,7 @@ RUN cd /tmp \
     && tar -xzf dolibarr.tar.gz \
     && cp -R dolibarr-$VERSION/htdocs/. /var/www/html \
     && rm -R dolibarr-$VERSION \
-	&& rm dolibarr.tar.gz
+    && rm dolibarr.tar.gz
 
 RUN mkdir /var/www/html/documents \
     && chown -hR www-data:www-data /var/www/html
