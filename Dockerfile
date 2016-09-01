@@ -2,7 +2,6 @@ FROM php:5.6-apache
 MAINTAINER JS Minet
 
 ENV VERSION 4.0.0
-ENV PHP_TIMEZONE Europe/Brussels
 
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libldap2-dev \
     && rm -rf /var/lib/apt/lists/* \
@@ -22,6 +21,8 @@ RUN cd /tmp \
 
 RUN mkdir /var/www/html/documents \
     && chown -hR www-data:www-data /var/www/html
+
+COPY php.ini /usr/local/etc/php
 
 VOLUME ["/var/www/html/conf", "/var/www/html/documents"]
 
