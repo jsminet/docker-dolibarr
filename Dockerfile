@@ -3,12 +3,14 @@ MAINTAINER JS Minet
 
 ENV VERSION 10.0.3
 
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libldap2-dev \
+RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libldap2-dev libicu-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
     && docker-php-ext-install gd \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install ldap \
+	&& docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
     && docker-php-ext-install mysqli \
     && apt-get purge -y libpng12-dev libjpeg-dev libldap2-dev \
 	&& cd /tmp \
