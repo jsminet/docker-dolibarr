@@ -1,7 +1,7 @@
 FROM php:5.6.40-apache-jessie
 MAINTAINER JS Minet
 
-ENV VERSION 10.0.3
+ENV VERSION 10.0.4
 
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libldap2-dev libicu-dev \
     && rm -rf /var/lib/apt/lists/* \
