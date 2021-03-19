@@ -1,18 +1,20 @@
-FROM php:5.6.40-apache-jessie
+FROM php:7.4.16-apache-buster
 MAINTAINER JS Minet
 
 ENV VERSION 13.0.2
 
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libldap2-dev libicu-dev \
+RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libldap2-dev libicu-dev libzip-dev zip \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+	&& docker-php-ext-install zip \
+    && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install gd \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install ldap \
 	&& docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install mysqli \
-    && apt-get purge -y libpng12-dev libjpeg-dev libldap2-dev \
+    && docker-php-ext-install calendar \
+    && apt-get purge -y libpng-dev libjpeg-dev libldap2-dev \
 	&& cd /tmp \
     && curl "https://codeload.github.com/Dolibarr/dolibarr/tar.gz/${VERSION}" -o dolibarr.tar.gz \
     && tar -xzf dolibarr.tar.gz \
