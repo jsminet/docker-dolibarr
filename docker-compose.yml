@@ -10,7 +10,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
-      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.service=traefik"
       # The Web UI port http://0.0.0.0:8080 (enabled by --api.insecure=true)
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
@@ -21,8 +21,10 @@ services:
       # Create hash password -> echo $(htpasswd -nb user2 test123) | sed -e s/\\$/\\$\\$/g
         # Compress Middleware
       - "traefik.http.middlewares.test-compress.compress=true"
-        # Rate Limit Middleware
+      # Rate Limit Middleware
       - "traefik.http.middlewares.test-ratelimit.ratelimit.average=100"
+      # TLS
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
 
     volumes:
       # Copies the Let's Encrypt certificate locally for ease of backing up
@@ -50,7 +52,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
-      - "traefik.http.routers.dolibarr.entrypoints=websecure"
+      - "traefik.http.routers.dolibarr.entrypoints=web"
+      - "traefik.http.routers.dolibarr.middlewares=test-redirectscheme"
       - "traefik.http.routers.dolibarr.service=dolibarr"
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
       - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
+      # Secure
+      - "traefik.http.routers.dolibarr-secure.rule=Host(`$DOLIBARR_DNS`)"
+      - "traefik.http.routers.dolibarr-secure.entrypoints=websecure"
+      - "traefik.http.routers.dolibarr-secure.tls.certresolver=myresolver"
+      # Redirect Scheme HTTP -> HTTPS
+      - "traefik.http.middlewares.test-redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.test-redirectscheme.redirectscheme.permanent=true"
