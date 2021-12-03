@@ -53,15 +53,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
       - "traefik.http.routers.dolibarr.entrypoints=web"
-      - "traefik.http.routers.dolibarr.middlewares=test-redirectscheme"
       - "traefik.http.routers.dolibarr.service=dolibarr"
       - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
-      # Secure
-      - "traefik.http.routers.dolibarr-secure.rule=Host(`$DOLIBARR_DNS`)"
-      - "traefik.http.routers.dolibarr-secure.entrypoints=websecure"
-      - "traefik.http.routers.dolibarr-secure.tls.certresolver=myresolver"
-      # Services
-      - "traefik.http.services.dolibarr-secure.loadbalancer.server.port=80"
-      # Redirect Scheme HTTP -> HTTPS
-      - "traefik.http.middlewares.test-redirectscheme.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.test-redirectscheme.redirectscheme.permanent=true"
+      - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
