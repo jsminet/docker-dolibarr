@@ -1,7 +1,7 @@
 FROM php:7.4.16-apache-buster
-MAINTAINER JS Minet
+LABEL maintainer="JS Minet"
 
-ENV VERSION 13.0.2
+ENV VERSION 14.0.4
 
 RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libldap2-dev libicu-dev libzip-dev zip \
     && rm -rf /var/lib/apt/lists/* \
