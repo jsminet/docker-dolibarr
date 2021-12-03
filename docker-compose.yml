@@ -12,6 +12,7 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.service=traefik"
+      - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
       # So that Traefik can listen to the Docker events
