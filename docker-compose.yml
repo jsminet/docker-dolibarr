@@ -52,7 +52,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
-      - "traefik.http.routers.dolibarr.entrypoints=web"
+      - "traefik.http.routers.dolibarr.entrypoints=websecure"
       - "traefik.http.routers.dolibarr.service=dolibarr"
       - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
