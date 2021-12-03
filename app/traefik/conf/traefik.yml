@@ -1,0 +1,41 @@
+################################################################
+# API and dashboard configuration
+################################################################
+api:
+  # Dashboard
+  dashboard: true
+  insecure: true
+################################################################
+# Docker configuration backend
+################################################################
+providers:
+  docker:
+    exposedByDefault: false
+    swarmMode: false
+    watch: true
+################################################################
+# Traefik Logging
+################################################################
+log:
+  level: INFO
+
+################################################################
+# Entrypoint
+################################################################
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+################################################################
+# Challenge TLS
+################################################################
+certificatesResolvers:
+  myresolver:
+    acme:
+      email:   
+      storage: acme.json
+      tlsChallenge: true
+        # # used during the challenge
+        entryPoint: web

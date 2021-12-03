@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v2.5.4
+    ports:
+      # Exposes port 80 for incomming web requests
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.service=traefik"
+      # The Web UI port http://0.0.0.0:8080 (enabled by --api.insecure=true)
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      # Middleware BasicAuth
+      - "traefik.http.routers.traefik.middlewares=test-auth,test-compress,test-ratelimit"
+      - "traefik.http.middlewares.test-auth.basicauth.usersfile=/etc/traefik/users/usersfile"
+      # user1: traefik password: training
+      # Create hash password -> echo $(htpasswd -nb user2 test123) | sed -e s/\\$/\\$\\$/g
+        # Compress Middleware
+      - "traefik.http.middlewares.test-compress.compress=true"
+        # Rate Limit Middleware
+      - "traefik.http.middlewares.test-ratelimit.ratelimit.average=100"
+
+    volumes:
+      # Copies the Let's Encrypt certificate locally for ease of backing up
+      - ./letsencrypt:/letsencrypt
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./app/traefik/conf/traefik.yml:/etc/traefik/traefik.yml
+      - ./app/traefik/users/usersfile:/etc/traefik/users/usersfile
+
+  mariadb:
+    image: mariadb:10.7
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+
+  dolibarr:
+    image: tuxgasy/dolibarr
+    environment:
+      DOLI_DB_HOST: $DOLI_DB_HOST
+      DOLI_DB_USER: $DOLI_DB_USER
+      DOLI_DB_PASSWORD: $DOLI_DB_PASSWORD
+      DOLI_DB_NAME: $DOLI_DB_NAME
+      DOLI_URL_ROOT: $DOLIBARR_DNS
+      PHP_INI_DATE_TIMEZONE: $PHP_INI_DATE_TIMEZONE
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
+      - "traefik.http.routers.dolibarr.entrypoints=websecure"
+      - "traefik.http.routers.dolibarr.service=dolibarr"
+      - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
+      - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
