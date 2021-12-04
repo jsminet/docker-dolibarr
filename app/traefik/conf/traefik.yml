@@ -11,13 +11,13 @@ api:
 providers:
   docker:
     exposedByDefault: false
-    swarmMode: false
+    swarmMode: true
     watch: true
 ################################################################
 # Traefik Logging
 ################################################################
 log:
-  level: DEBUG
+  level: INFO
 
 ################################################################
 # Entrypoint
