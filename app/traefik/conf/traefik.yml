@@ -17,7 +17,7 @@ providers:
 # Traefik Logging
 ################################################################
 log:
-  level: INFO
+  level: DEBUG
 
 ################################################################
 # Entrypoint
@@ -41,10 +41,11 @@ entryPoints:
 certificatesResolvers:
   myresolver:
     acme:
-      email: your-email@example.com
+      email: postmaster@example.com
       # Remove for production environement
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-      storage: letsencrypt/acme.json
-      httpChallenge:
+      storage: /letsencrypt/acme.json
+      tlsChallenge: true
+      #httpChallenge:
         # used during the challenge
-        entryPoint: web
+      #  entryPoint: web

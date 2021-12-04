@@ -10,15 +10,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.entrypoints=web"
       - "traefik.http.routers.traefik.service=traefik"
-      - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
+      #- "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
       - ./app/traefik/conf/traefik.yml:/etc/traefik/traefik.yml
-      - ./letsencrypt:/letsencrypt
+      - ./app/traefik/letsencrypt:/letsencrypt
 
   mariadb:
     image: mariadb:10.7
@@ -38,7 +38,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
-      - "traefik.http.routers.dolibarr.entrypoints=websecure"
+      - "traefik.http.routers.dolibarr.entrypoints=web"
       - "traefik.http.routers.dolibarr.service=dolibarr"
-      - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
+      #- "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"

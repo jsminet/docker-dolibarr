@@ -1,1 +1,2 @@
 app/traefik/users/usersfile
+app/traefik/letsencrypt/acme.json
