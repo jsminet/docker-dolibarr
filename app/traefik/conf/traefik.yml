@@ -38,14 +38,14 @@ entryPoints:
 ################################################################
 # Challenge TLS
 ################################################################
-certificatesResolvers:
-  myresolver:
-    acme:
-      email: postmaster@example.com
+#certificatesResolvers:
+#  myresolver:
+#    acme:
+#      email: postmaster@example.com
       # Remove for production environement
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-      storage: /letsencrypt/acme.json
-      tlsChallenge: true
+#      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+#      storage: /letsencrypt/acme.json
+#      tlsChallenge: true
       #httpChallenge:
         # used during the challenge
       #  entryPoint: web
