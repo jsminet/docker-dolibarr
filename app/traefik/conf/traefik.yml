@@ -42,7 +42,9 @@ certificatesResolvers:
   myresolver:
     acme:
       email: your-email@example.com
-      storage: acme.json
+      # Remove for production environement
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      storage: letsencrypt/acme.json
       httpChallenge:
         # used during the challenge
         entryPoint: web
