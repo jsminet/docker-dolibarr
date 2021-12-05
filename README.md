@@ -17,3 +17,11 @@ On Linux
 ```
 docker stack deploy -c <(docker-compose config) stack-name
 ```
+
+ - Generate a docker secret mysql root password
+
+On Windows gitbash
+
+```
+ openssl rand -base64 20 | docker secret create mysql_root_password -
+ ```

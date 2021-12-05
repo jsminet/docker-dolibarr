@@ -23,8 +23,10 @@ services:
   mariadb:
     image: mariadb:10.7
     environment:
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: $MYSQL_DATABASE
+    secrets:
+      - mysql_root_password   
     volumes:
       - "./dump:/docker-entrypoint-initdb.d"
 
@@ -33,11 +35,13 @@ services:
     environment:
       DOLI_DB_HOST: $DOLI_DB_HOST
       DOLI_DB_USER: $DOLI_DB_USER
-      DOLI_DB_PASSWORD: $DOLI_DB_PASSWORD
+      DOLI_DB_PASSWORD_FILE: /run/secrets/mysql_root_password
       DOLI_DB_NAME: $DOLI_DB_NAME
       DOLI_URL_ROOT: $DOLIBARR_DNS
       PHP_INI_DATE_TIMEZONE: $PHP_INI_DATE_TIMEZONE
       DOLI_INSTALL_AUTO: 0
+    secrets:
+      - mysql_root_password 
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
@@ -47,3 +51,7 @@ services:
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
     volumes:
       - "./documents:/var/www/documents"
+
+secrets:
+  mysql_root_password:
+    external: true
