@@ -1,0 +1,1 @@
+Put a valid dolibarr backup, sql.gz compressed file is allowed
