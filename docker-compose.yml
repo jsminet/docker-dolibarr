@@ -7,13 +7,13 @@ services:
       # Exposes port 80 for incomming web requests
       - "80:80"
       - "443:443"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
-      - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.routers.traefik.service=traefik"
+    #labels:
+      #- "traefik.enable=true"
+      #- "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
+      #- "traefik.http.routers.traefik.entrypoints=web"
+      #- "traefik.http.routers.traefik.service=traefik"
       #- "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      #- "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
