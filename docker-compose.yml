@@ -22,13 +22,14 @@ services:
 
   mariadb:
     image: mariadb:10.7
+    hostname: mariadb
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
       MYSQL_DATABASE: $MYSQL_DATABASE
     secrets:
       - mysql_root_password   
     volumes:
-      - "./dump:/docker-entrypoint-initdb.d"
+      - "./dump/in:/docker-entrypoint-initdb.d"
 
   dolibarr:
     image: tuxgasy/dolibarr
@@ -51,11 +52,22 @@ services:
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
     volumes:
       - "./documents:/var/www/documents"
-      
+
+  alpine:
+    image: docker-cron
+    build: app/docker-cron
+    init: true
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      DOLI_DB_USER: $DOLI_DB_USER
+      DOLI_DB_HOST: $DOLI_DB_HOST
+    secrets:
+      - mysql_root_password 
+    volumes:
+      - ./app/docker-cron/crontab:/var/spool/cron/crontabs/root
+      - ./dump/out:/tmp/out
+
 secrets:
   mysql_root_password:
     external: true
-
-networks:
-  default:
-    driver: bridge
