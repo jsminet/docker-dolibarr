@@ -5,4 +5,4 @@
 # 0       2       *       *       *       run-parts /etc/periodic/daily
 # 0       3       *       *       6       run-parts /etc/periodic/weekly
 # 0       5       1       *       *       run-parts /etc/periodic/monthly
-0       0       *       *       *       mysqldump -h${$DOLI_DB_HOST} -u${DOLI_DB_USER} -p`cat /run/secrets/mysql_root_password` ${$MYSQL_DATABASE} --lock-tables --single-transaction --disable-keys --add-drop-table=TRUE --tables --complete-insert --extended-insert --hex-blob --default-character-set=utf8 | gzip -9 > /tmp/out/dolibarr_`date +\%Y\%m\%d-\%H\%M`.sql.gz 2>&1
+0       0       *       *       *       mysqldump -h`echo $DOLI_DB_HOST` -u`echo $DOLI_DB_USER` -p`cat /run/secrets/mysql_root_password` `echo $MYSQL_DATABASE` --lock-tables --single-transaction --disable-keys --add-drop-table=TRUE --tables --complete-insert --extended-insert --hex-blob --default-character-set=utf8 | gzip -9 > /tmp/out/dolibarr_`date +\%Y\%m\%d-\%H\%M`.sql.gz 2>&1
