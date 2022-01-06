@@ -4,13 +4,14 @@ ENV BUILD_DEPS \
  mariadb-client \
  bash
 
+COPY entrypoint.sh /usr/local/bin/
+
 RUN apk update \
  && apk add --no-cache ${BUILD_DEPS} \ 
  && which crond \
  && rm -rf /etc/periodic \
+ && chmod +x /usr/local/bin/entrypoint.sh \
  && rm -rf /var/cache/apk/* 
 
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["crond", "-f", "-l", "2"]
