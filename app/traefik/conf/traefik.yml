@@ -17,35 +17,32 @@ providers:
 # Traefik Logging
 ################################################################
 log:
-  level: DEBUG
-
+  level: INFO
 ################################################################
 # Entrypoint
 ################################################################
 entryPoints:
   web:
     address: :80
-    #http:
-    #  redirections:
-    #    entryPoint:
-    #      to: websecure
-    #      scheme: https
-    #      permanent: true
-
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     address: :443
-
 ################################################################
 # Challenge TLS
 ################################################################
-#certificatesResolvers:
-#  myresolver:
-#    acme:
-#      email: postmaster@example.com
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: postmaster@example.com
       # Remove for production environement
 #      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-#      storage: /letsencrypt/acme.json
+      storage: /letsencrypt/acme.json
 #      tlsChallenge: true
-      #httpChallenge:
+      httpChallenge:
         # used during the challenge
-      #  entryPoint: web
+        entryPoint: web
