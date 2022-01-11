@@ -29,7 +29,7 @@ services:
     secrets:
       - mysql_root_password   
     volumes:
-      - "./dump/in:/docker-entrypoint-initdb.d"
+      - ./dump/in:/docker-entrypoint-initdb.d
 
   dolibarr:
     image: tuxgasy/dolibarr
@@ -51,7 +51,7 @@ services:
       - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
       - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
     volumes:
-      - "./documents/in:/var/www/documents"
+      - ./documents/in:/var/www/documents
 
   alpine:
     image: docker-cron
@@ -67,8 +67,8 @@ services:
     volumes:
       - ./app/docker-cron/crontab:/var/spool/cron/crontabs/root
       - ./dump/out:/tmp/dump/out
-      - "./documents/in:/tmp/documents/in"
-      - "./documents/out:/tmp/documents/out"
+      - ./documents/in:/tmp/documents/in
+      - ./documents/out:/tmp/documents/out
 
 secrets:
   mysql_root_password:
