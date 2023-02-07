@@ -1,8 +1,8 @@
-version: '3.7'
+version: '3.8'
 
 services:
   traefik:
-    image: traefik:v2.5.4
+    image: traefik:v2.9.6
     ports:
       # Exposes port 80 for incomming web requests
       - "80:80"
@@ -21,7 +21,7 @@ services:
       - ./app/traefik/letsencrypt:/letsencrypt
 
   mariadb:
-    image: mariadb:10.7
+    image: mariadb:latest
     hostname: mariadb
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
