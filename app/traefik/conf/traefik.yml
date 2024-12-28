@@ -9,10 +9,12 @@ api:
 # Docker configuration backend
 ################################################################
 providers:
-  docker:
+  swarm:
+    endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    swarmMode: true
-    watch: true
+  #docker:
+  #  exposedByDefault: false
+  #  watch: true
 ################################################################
 # Traefik Logging
 ################################################################
@@ -39,8 +41,8 @@ certificatesResolvers:
   myresolver:
     acme:
       email: postmaster@example.com
-      # Remove for production environement
-#      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      # Remove for production environment
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       storage: /letsencrypt/acme.json
 #      tlsChallenge: true
       httpChallenge:

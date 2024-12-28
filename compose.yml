@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   traefik:
-    image: traefik:v2.9.6
+    image: traefik:3.2.1
     ports:
       # Exposes port 80 for incomming web requests
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     #labels:
       #- "traefik.enable=true"
       #- "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
@@ -24,23 +22,23 @@ services:
     image: mariadb:latest
     hostname: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
-      MYSQL_DATABASE: $MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD_FILE
+      - MYSQL_DATABASE
     secrets:
       - mysql_root_password   
     volumes:
       - ./dump/in:/docker-entrypoint-initdb.d
 
   dolibarr:
-    image: tuxgasy/dolibarr
+    image: dolibarr/dolibarr
     environment:
-      DOLI_DB_HOST: $DOLI_DB_HOST
-      DOLI_DB_USER: $DOLI_DB_USER
-      DOLI_DB_PASSWORD_FILE: /run/secrets/mysql_root_password
-      DOLI_DB_NAME: $DOLI_DB_NAME
-      DOLI_URL_ROOT: $DOLIBARR_DNS
-      PHP_INI_DATE_TIMEZONE: $PHP_INI_DATE_TIMEZONE
-      DOLI_INSTALL_AUTO: 0
+      - DOLI_DB_HOST
+      - DOLI_DB_USER
+      - DOLI_DB_PASSWORD_FILE
+      - DOLI_DB_NAME
+      - DOLI_URL_ROOT
+      - PHP_INI_DATE_TIMEZONE
+      - DOLI_INSTALL_AUTO
     secrets:
       - mysql_root_password 
     labels:
@@ -56,6 +54,8 @@ services:
   alpine:
     image: docker-cron
     build: app/docker-cron
+    profiles:
+      - cron
     init: true
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
