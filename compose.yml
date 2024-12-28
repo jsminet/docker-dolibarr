@@ -25,7 +25,7 @@ services:
       - MYSQL_ROOT_PASSWORD_FILE
       - MYSQL_DATABASE
     secrets:
-      - mysql_root_password   
+      - mysql_root_password
     volumes:
       - ./dump/in:/docker-entrypoint-initdb.d
 
@@ -40,7 +40,7 @@ services:
       - PHP_INI_DATE_TIMEZONE
       - DOLI_INSTALL_AUTO
     secrets:
-      - mysql_root_password 
+      - mysql_root_password
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
@@ -63,7 +63,7 @@ services:
       DOLI_DB_USER: $DOLI_DB_USER
       DOLI_DB_HOST: $DOLI_DB_HOST
     secrets:
-      - mysql_root_password 
+      - mysql_root_password
     volumes:
       - ./app/docker-cron/crontab:/var/spool/cron/crontabs/root
       - ./dump/out:/tmp/dump/out
