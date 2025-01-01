@@ -1,1 +1,0 @@
-The letsenscrypt ACME certificate will be generated in this directory
