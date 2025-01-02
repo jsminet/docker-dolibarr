@@ -41,7 +41,7 @@ certificatesResolvers:
   myresolver:
     acme:
       email: postmaster@example.com
-      # Remove for production environment
+      # Comment next line for production environment default value
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       storage: /letsencrypt/acme.json
 #      tlsChallenge: true

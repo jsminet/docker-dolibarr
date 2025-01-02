@@ -1,3 +1,21 @@
+x-low-resources: &low-resources
+  resources:
+    limits:
+      cpus: '0.3'
+      memory: 128M
+    reservations:
+      cpus: '0.15'
+      memory: 64M
+
+x-mid-resources: &mid-resources
+  resources:
+    limits:
+      cpus: '0.8'
+      memory: 512M
+    reservations:
+      cpus: '0.25'
+      memory: 128M
+
 services:
   traefik:
     image: traefik:3.2.1
@@ -17,6 +35,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./app/traefik/conf/traefik.yml:/etc/traefik/traefik.yml
       - acme-data:/letsencrypt
+    deploy:
+      <<: *low-resources
+      update_config:
+        delay: 10s
+        order: start-first
+      placement:
+        constraints:
+          - node.role == manager
 
   mariadb:
     image: mariadb
@@ -30,6 +56,12 @@ services:
       - ./app/mariadb/conf:/etc/mysql/conf.d
       - ./app/mariadb/dump:/docker-entrypoint-initdb.d
       - mariadb-data:/var/lib/mysql
+    deploy:
+      endpoint_mode: dnsrr
+      <<: *mid-resources
+      placement:
+        constraints:
+          - node.role == manager
 
   dolibarr:
     image: dolibarr/dolibarr
@@ -43,16 +75,24 @@ services:
       - DOLI_INSTALL_AUTO
     secrets:
       - mysql_root_password
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
-      - "traefik.http.routers.dolibarr.entrypoints=websecure"
-      - "traefik.http.routers.dolibarr.service=dolibarr"
-      - "traefik.http.routers.dolibarr.tls=true"
-      - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
-      - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
     volumes:
       - dolibarr-data:/var/www/documents
+    deploy:
+      <<: *low-resources
+      update_config:
+        delay: 10s
+        order: start-first
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
+        - "traefik.http.routers.dolibarr.entrypoints=websecure"
+        - "traefik.http.routers.dolibarr.service=dolibarr"
+        #- "traefik.http.routers.dolibarr.tls=true"
+        - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
+        - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
 
 volumes:
   mariadb-data:
