@@ -1,8 +1,1 @@
 app/traefik/users/usersfile
-app/traefik/letsencrypt/acme.json
-dump/in/*.sql
-dump/in/*.sql.gz
-dump/out/*.sql
-dump/out/*.sql.gz
-documents/in/**
-documents/out/**

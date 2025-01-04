@@ -18,11 +18,12 @@ x-mid-resources: &mid-resources
 
 services:
   traefik:
-    image: traefik:3.2.1
+    image: traefik:3.2.3
     ports:
       # Exposes port 80 for incomming web requests
       - 80:80
       - 443:443
+    # WIP
     #labels:
       #- "traefik.enable=true"
       #- "traefik.http.routers.traefik.rule=Host(`$TRAEFIK_DNS`)"
@@ -64,7 +65,7 @@ services:
           - node.role == manager
 
   dolibarr:
-    image: dolibarr/dolibarr
+    image: dolibarr/dolibarr:20.0.1
     environment:
       - DOLI_DB_HOST
       - DOLI_DB_USER
@@ -90,7 +91,6 @@ services:
         - "traefik.http.routers.dolibarr.rule=Host(`$DOLIBARR_DNS`)"
         - "traefik.http.routers.dolibarr.entrypoints=websecure"
         - "traefik.http.routers.dolibarr.service=dolibarr"
-        #- "traefik.http.routers.dolibarr.tls=true"
         - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
         - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
 
