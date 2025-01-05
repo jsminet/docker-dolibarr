@@ -57,10 +57,15 @@ $ docker compose down -v
 
 The simplest way is to create a dedicated container with cron jobs (**ubuntu-cron**) to export all critical data into external volumes.
 
+```Bash
+# Building the ubuntu cron container
+$ docker compose build
+```
+
 Check the injected [crontab](app/docker-cron/crontab) and change the setup if needed with [some examples](https://crontab.guru/examples.html).
 
 ### Database
-See [dump_database](app/docker-cron/scripts/dump_database.sh) shell script, the scripts will launch every day at midnight.
+See [dump_database](app/docker-cron/scripts/dump_database.sh) shell script, the script will launch every day at midnight.
 
 ### Documents
 See [dump_documents](app/docker-cron/scripts/dump_documents.sh) shell script, the script will launch every day at 01:00 am.

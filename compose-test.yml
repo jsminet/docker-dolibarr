@@ -57,7 +57,6 @@ services:
     container_name: ubuntu-cron
     build:
       context: ./app/docker-cron
-      dockerfile: ubuntu.dockerfile
     init: true
     environment:
       - DOLI_DB_HOST

@@ -80,9 +80,6 @@ services:
       - dolibarr-data:/var/www/documents
     deploy:
       <<: *low-resources
-      update_config:
-        delay: 10s
-        order: start-first
       placement:
         constraints:
           - node.role == manager
@@ -94,9 +91,32 @@ services:
         - "traefik.http.routers.dolibarr.tls.certresolver=myresolver"
         - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
 
+  ubuntu-cron:
+    container_name: ubuntu-cron
+    build:
+      context: ./app/docker-cron
+    init: true
+    environment:
+      - DOLI_DB_HOST
+      - MYSQL_ROOT_PASSWORD_FILE
+      - MYSQL_DATABASE
+    secrets:
+      - mysql_root_password
+    volumes:
+      - ./app/docker-cron/crontab:/etc/crontab
+      - ./app/docker-cron/scripts:/scripts
+      - dolibarr-data:/var/www/documents
+      - dolibarr-dump:/dump
+    deploy:
+      <<: *low-resources
+      placement:
+        constraints:
+          - node.role == manager
+
 volumes:
   mariadb-data:
   dolibarr-data:
+  dolibarr-dump:
   acme-data:
 
 secrets:
