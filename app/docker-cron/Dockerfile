@@ -8,9 +8,9 @@ RUN apt-get update \
     && which cron \
     && rm -rf /etc/cron.*/*
 
-COPY entrypoint.sh /entrypoint.sh
+COPY --chmod=755 entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 
 # https://manpages.ubuntu.com/manpages/trusty/man8/cron.8.html
 # -f | Stay in foreground mode, don't daemonize.
