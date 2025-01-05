@@ -54,6 +54,7 @@ services:
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
 
   ubuntu-cron:
+    image: ubuntu-cron
     container_name: ubuntu-cron
     build:
       context: ./app/docker-cron

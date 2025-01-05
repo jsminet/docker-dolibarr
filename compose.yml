@@ -92,6 +92,7 @@ services:
         - "traefik.http.services.dolibarr.loadbalancer.server.port=80"
 
   ubuntu-cron:
+    image: ubuntu-cron
     container_name: ubuntu-cron
     build:
       context: ./app/docker-cron
