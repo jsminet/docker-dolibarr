@@ -14,7 +14,7 @@ services:
   mariadb:
     image: mariadb
     hostname: mariadb
-    #command: --character-set-server=utf8mb3 --collation-server=utf8mb3_general_ci
+    #command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     environment:
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
@@ -53,6 +53,23 @@ services:
       - "traefik.http.routers.adminer.service=adminer"
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
 
+  ubuntu-cron:
+    container_name: ubuntu-cron
+    build:
+      context: ./app/docker-cron
+      dockerfile: ubuntu.dockerfile
+    init: true
+    environment:
+      - DOLI_DB_HOST
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+    volumes:
+      - ./app/docker-cron/crontab:/etc/crontab
+      - ./app/docker-cron/scripts:/scripts
+      - dolibarr-data:/var/www/documents
+      - dolibarr-dump:/dump
+      
 volumes:
   mariadb-data:
   dolibarr-data:
+  dolibarr-dump:

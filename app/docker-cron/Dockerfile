@@ -1,17 +1,18 @@
-FROM alpine:3.15
+FROM ubuntu
 
-ENV BUILD_DEPS \
- mariadb-client \
- bash
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y --no-install-recommends install -y cron mariadb-client \
+    # Remove package lists for smaller image sizes
+    && rm -rf /var/lib/apt/lists/* \
+    && which cron \
+    && rm -rf /etc/cron.*/*
 
-COPY entrypoint.sh /usr/local/bin/
+COPY entrypoint.sh /entrypoint.sh
 
-RUN apk update \
- && apk add --no-cache ${BUILD_DEPS} \ 
- && which crond \
- && rm -rf /etc/periodic \
- && chmod +x /usr/local/bin/entrypoint.sh \
- && rm -rf /var/cache/apk/* 
+ENTRYPOINT ["/entrypoint.sh"]
 
-ENTRYPOINT ["entrypoint.sh"]
-CMD ["crond", "-f", "-l", "2"]
+# https://manpages.ubuntu.com/manpages/trusty/man8/cron.8.html
+# -f | Stay in foreground mode, don't daemonize.
+# -L loglevel | Tell  cron  what to log about jobs (errors are logged regardless of this value) as the sum of the following values:
+CMD ["cron","-f", "-L", "2"]

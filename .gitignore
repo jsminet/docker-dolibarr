@@ -1,1 +1,3 @@
 app/traefik/users/usersfile
+app/mariadb/dump/in/*.sql.gz
+app/mariadb/dump/out/*.sql.gz
