@@ -55,7 +55,7 @@ services:
       - mysql_root_password
     volumes:
       - ./app/mariadb/conf:/etc/mysql/conf.d
-      - ./app/mariadb/dump:/docker-entrypoint-initdb.d
+      - ./app/mariadb/dump/in:/docker-entrypoint-initdb.d
       - mariadb-data:/var/lib/mysql
     deploy:
       endpoint_mode: dnsrr
