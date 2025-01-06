@@ -1,9 +1,12 @@
 #!/bin/sh
 echo "`date +\%Y/\%m/\%d-\%H:\%M` - dumping database ${MYSQL_DATABASE}"
 
+# Get the password for test or swarm prod environment
+PASSWORD=${MYSQL_ROOT_PASSWORD:-`cat /run/secrets/mysql_root_password`}
+
 mysqldump -h`echo $DOLI_DB_HOST` \
 -uroot \
--p`echo $MYSQL_ROOT_PASSWORD` \
+-p`echo $PASSWORD` \
 `echo $MYSQL_DATABASE` \
 --lock-tables \
 --single-transaction \
